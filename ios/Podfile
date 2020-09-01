@@ -8,6 +8,10 @@ target 'Atlantis' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
   target 'AtlantisTests' do
     inherit! :complete
     # Pods for testing
