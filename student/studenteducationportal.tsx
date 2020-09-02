@@ -2,107 +2,133 @@ import React, { Component } from 'react';
 import {ScrollView} from 'react-native';
 import { Container, Header, View,Title, Picker, Form, Button, Text, Card, CardItem, Body} from 'native-base';
 import { WebView } from 'react-native-webview';
+import { AsyncStorage } from 'react-native';
 import config from './../config';
+
+let status = 0;
+let status1 = 0;
+let token = '';
 
 export default class StudentEducationPortal extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          selected: "key1",
-          showVideos:false
         };
       }
+
+      async componentDidMount(){
+        await this.getValue('token');
+        fetch(config.baseurl+'student/subject',{
+          method:'get',
+          headers:{
+            'auth':token
+          }
+        }).then(res =>{
+          status = res.status
+          return res.json();
+        }).then(data =>{
+          if(status === 200 || status === 201){
+            this.setState({subjects: data})
+          }
+          else{
+            console.log("Error"+ data.message);
+          }
+        }).catch(er=> console.log(er));
+      }
+    
+      getValue = async (key) => {
+        try {
+          let value = await AsyncStorage.getItem(key);
+          token =value;
+          return value;
+        } catch(e) {
+          console.log(e)
+        }
+      }
       
-      onValueChange(value: string) {
+      onValueChange(value) {
         this.setState({
           selected: value
         });
       }
+
+      getVideos=()=>{
+        fetch(config.baseurl+'school/get/subject/video',{
+          method:'post',
+          headers:{
+            'auth':token,
+            'Content-Type':'application/json'
+          },
+          body:JSON.stringify({subjectid:this.state.selected})
+        })
+        .then(res =>{
+          status1 = res.status;
+          return res.json();
+        }).then(data=>{
+          if(status1 ===200 || status1 === 201){
+            this.setState({videos:data})
+          }
+          else{
+            console.log("error"+data.message)
+          }
+        }).catch(er=>console.log(er));
+      }
       
   render() {
+    console.log(this.state);
     return (
         <Container>
             <Header>
                 <Title style={{margin:10}}>Homework</Title>
             </Header>
             <View style={{width:'100%', height:80}}>
-            <Form style={{flex:1, flexDirection:'row',justifyContent:'space-between', margin: 10}}>
+            {this.state.subjects?
+            (
+              <Form style={{flex:1, flexDirection:'row',justifyContent:'space-between', margin: 10}}>
             <Picker
               note
               mode="dropdown"
               style={{width:"40%"}}
-              selectedValue={this.state.selected}
               onValueChange={this.onValueChange.bind(this)}
             >
-              <Picker.Item label="Subject Name" value="key0" />
-              <Picker.Item label="Subject 1" value="key1" />
-              <Picker.Item label="Subject 2" value="key2" />
-              <Picker.Item label="Subject 3" value="key3" />
-              <Picker.Item label="Subject 4" value="key4" />
+               <Picker.Item label="Select Subject" value="Subject" />
+              {this.state.subjects.map((subject,index)=>{
+                return(
+                        <Picker.Item label={subject.subjectname} value={subject.id} key={index} />
+                )
+              })}
             </Picker>
-            <Button
+            {this.state.selected?(<Button
             style={{backgroundColor:'#42b6f5'}}
-            onPress={()=>this.setState({showVideos:!this.state.showVideos})}
+            onPress={this.getVideos}
             >
             <Text>View Videos</Text>
-            </Button>
+            </Button>):null}
+            
             </Form>
+            ):null}
+            
             </View>
             <View style={{flex:1, flexDirection:'column', width:'100%'}}>
-            {this.state.showVideos?
+            {this.state.videos?
            <ScrollView style={{width:"100%" ,height:"95%"}}>
+             {this.state.videos.map((video,index)=>{
+               return(
                 <Card style={{width:'94%', height:200, marginLeft:"2%",overflow:'hidden'}}>
-                    <WebView
-                        javaScriptEnabled={true}
-                        scrollEnabled={false}
-                        allowsFullscreenVideo={true}
-                        ignoreSslError={true}
-                        source = {{uri:"https://www.youtube.com/embed/cqyziA30whE"}}
-                        // source={{html: '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/cqyziA30whE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>'}}
-                        />                        
-                    <Text>
-                       Capther 1
-                    </Text>
-                </Card>
-                <Card style={{width:'94%', height:200, marginLeft:"2%",overflow:'hidden'}}>
-                    <WebView
-                        javaScriptEnabled={true}
-                        scrollEnabled={false}
-                        allowsFullscreenVideo={true}
-                        ignoreSslError={true}
-                        source = {{uri:"https://www.youtube.com/embed/cqyziA30whE"}}
-                        // source={{html: '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/cqyziA30whE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>'}}
-                        />                        
-                    <Text>
-                       Capther 2
-                    </Text>
-                </Card>
-                <Card style={{width:'94%', height:200, marginLeft:"2%",overflow:'hidden'}}>
-                    <WebView
-                        javaScriptEnabled={true}
-                        scrollEnabled={false}
-                        allowsFullscreenVideo={true}
-                        ignoreSslError={true}
-                        source = {{uri:"https://www.youtube.com/embed/cqyziA30whE"}}
-                        // source={{html: '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/cqyziA30whE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>'}}
-                        />                        
-                    <Text>
-                       Capther 3
-                    </Text>
-                </Card>
-                <Card style={{width:'94%', height:200, marginLeft:"2%",overflow:'hidden'}}>
-                    <WebView
-                        javaScriptEnabled={true}
-                        scrollEnabled={false}
-                        allowsFullscreenVideo={true}
-                        ignoreSslError={true}
-                        source = {{uri:"https://www.youtube.com/embed/cqyziA30whE"}}
-                        // source={{html: '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/cqyziA30whE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>'}}
-                        />                        
-                    <Text>
-                       Capther 4
-                    </Text>
-                </Card>
+                <WebView
+                    javaScriptEnabled={true}
+                    scrollEnabled={false}
+                    allowsFullscreenVideo={true}
+                    ignoreSslError={true}
+                    source = {{uri:video.videolink}}
+                    
+                    />                        
+                <Text>
+                   {video.chaptername}
+                </Text>
+            </Card>
+               )
+             })}
                 
            </ScrollView>
             :null} 

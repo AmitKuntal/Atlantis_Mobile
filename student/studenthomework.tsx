@@ -1,12 +1,49 @@
 import React, { Component } from 'react';
 import { Image,ScrollView } from 'react-native';
 import { Container, Header, Card, CardItem, Text, Body, Title } from 'native-base';
-const cards = {
-    text: 'Card One',
-    name: 'One',
-    image: require('./component/background.jpg'),
-  };
+import { AsyncStorage } from 'react-native';
+import config from './../config';
+
+let status = 0;
+let token = '';
+
 export default class StudentHomework extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    };
+  };
+  
+  async componentDidMount(){
+    await this.getValue('token');
+    fetch(config.baseurl+'student/homework',{
+      method:'get',
+      headers:{
+        'auth':token
+      }
+    }).then(res =>{
+      status = res.status
+      return res.json();
+    }).then(data =>{
+      if(status === 200 || status === 201){
+        this.setState({homework: data})
+      }
+      else{
+        console.log("Error"+ data.message);
+      }
+    }).catch(er=> console.log(er));
+  }
+
+  getValue = async (key) => {
+    try {
+      let value = await AsyncStorage.getItem(key);
+      token =value;
+      return value;
+    } catch(e) {
+      console.log(e)
+    }
+  }
+
   render() {
     return (
       <Container>
@@ -14,52 +51,33 @@ export default class StudentHomework extends Component {
         <Title style={{margin:10}}>Homework</Title>
           </Header>
         <ScrollView>
+          {this.state.homework?this.state.homework.map((homework,index)=>{
+            return(
               <Card>
                 <CardItem header>
-                  <Text>Date - 12/12/2020</Text>
+                  <Text>Date - {homework.homeworkdate}</Text>
                 </CardItem>
-                <CardItem>
+                {homework.image?<CardItem>
                   <Body>
-                    <Image source = {cards.image} 
-                    style={{width:"100%"}}
+                    <Image source={{uri: `data:image/jpeg;base64,${homework.image}`}}  
+                    style={{
+                      width: "100%",
+                      height: 300,
+                      resizeMode: 'contain'
+                    }}
                           />
                   </Body>
+                </CardItem>:null}
+               {homework.homework?
+                <CardItem footer>
+                  <Text>{homework.homework}</Text>
                 </CardItem>
-                <CardItem footer button onPress={() => alert("This is Card Footer")}>
-                  <Text>Text Homework</Text>
-                </CardItem>
+               :null} 
               </Card>
-              <Card>
-                <CardItem header>
-                  <Text>Date - 12/12/2020</Text>
-                </CardItem>
-                <CardItem>
-                  <Body>
-                    <Image source = {cards.image} 
-                    style={{width:"100%"}}
-                          />
-                  </Body>
-                </CardItem>
-                <CardItem footer button onPress={() => alert("This is Card Footer")}>
-                  <Text>Text Homework</Text>
-                </CardItem>
-              </Card>
-              <Card>
-                <CardItem header>
-                  <Text>Date - 12/12/2020</Text>
-                </CardItem>
-                <CardItem>
-                  <Body>
-                    <Image source = {cards.image} 
-                    style={{width:"100%"}}
-                          />
-                  </Body>
-                </CardItem>
-                <CardItem footer button onPress={() => alert("This is Card Footer")}>
-                  <Text>Text Homework</Text>
-                </CardItem>
-              </Card>
-          
+            )
+          })
+          :<Text>Home work not found</Text>}
+              
         </ScrollView>
       </Container>
     );

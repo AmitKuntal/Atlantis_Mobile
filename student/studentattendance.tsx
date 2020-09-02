@@ -24,14 +24,14 @@ export default class StudentAttendance extends Component {
  
   setFromDate= (date)=>{
     let d  = new Date(date);
-    new Date(date).getVarDate
-    this.setState({fromDate: d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()})
+    let month = d.getMonth() + 1;
+    this.setState({fromDate: d.getFullYear()+"-"+month+"-"+d.getDate()})
   }
 
   setToDate =(date)=>{
     let d  = new Date(date);
-    new Date(date).getVarDate
-    this.setState({toDate: d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()})
+    let month = d.getMonth() + 1;
+    this.setState({toDate: d.getFullYear()+"-"+month+"-"+d.getDate()})
   }
 
   showAttendance=()=>{
@@ -52,7 +52,6 @@ export default class StudentAttendance extends Component {
         this.setState({data:data.attendancedata});
       }
       else{
-       console.log("Token"+this.state.token)
         console.log("Error ->" + JSON.stringify(data))
       }
     }).catch(err=> console.log("Error occur =>"+ err));
@@ -120,8 +119,8 @@ export default class StudentAttendance extends Component {
                   <Text>Status</Text>
                 </Right>
             </ListItem>
-            {this.state.data.map(attendance=>{
-             return (<ListItem style={{flex:1, flexDirection:'row', width:'100%', marginRight:"20%"}} >
+            {this.state.data.map((attendance, index)=>{
+             return (<ListItem style={{flex:1, flexDirection:'row', width:'100%', marginRight:"20%"}} key={index}>
                 <Left>
                     <Text style={{color:"black"}}>{attendance.attendancedate}</Text>
                 </Left>

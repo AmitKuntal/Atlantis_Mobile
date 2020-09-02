@@ -42,7 +42,7 @@ export default class Login extends Component {
       return res.json();
     })
     .then((data)=>{
-      if(status === 200 || status === 201){
+      if((status === 200 || status === 201)&& data.role === "Student"){
         this.setStringValue('token',data.accessToken);
         this.setStringValue('image',data.image);
         this.setStringValue('name',data.name);
