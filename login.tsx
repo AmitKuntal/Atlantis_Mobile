@@ -29,6 +29,32 @@ export default class Login extends Component {
     };
   };
 
+  async componentDidMount(){
+    await this.getValue('token');
+    fetch(config.baseurl+'auth/check/token',{
+      method:'get',
+      headers:{
+        'auth':token
+      }
+    }).then(res =>{
+      status = res.status
+      return res.json();
+    }).then(data =>{
+      if(status === 200 || status === 201){
+        Actions.StudentDashboard()
+      }
+    }).catch(er=> console.log(er));
+  }
+
+  getValue = async (key) => {
+    try {
+      let value = await AsyncStorage.getItem(key);
+      token =value;
+      return value;
+    } catch(e) {
+      console.log(e)
+    }
+  }
 
   login=()=>{
     fetch(config.baseurl+"auth/login/",{

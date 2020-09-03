@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Container, Header, View,Title, DatePicker, Form, Button, Text, ListItem, Left, Right, Radio} from 'native-base';
 import { AsyncStorage } from 'react-native';
 import {ScrollView} from 'react-native';
+import {Actions} from 'react-native-router-flux';
+
 
 import config from './../config';
 
@@ -43,7 +45,7 @@ export default class StudentAttendance extends Component {
       },
       body:JSON.stringify({fromDate:this.state.fromDate, toDate: this.state.toDate})
     }
-    console.log(options)
+
     fetch(config.baseurl+"attendance/student/self",options).then(res=>{
       status = res.status;
       return res.json();
@@ -53,6 +55,7 @@ export default class StudentAttendance extends Component {
       }
       else{
         console.log("Error ->" + JSON.stringify(data))
+        this.logout;
       }
     }).catch(err=> console.log("Error occur =>"+ err));
   }
@@ -65,6 +68,15 @@ export default class StudentAttendance extends Component {
     } catch(e) {
       console.log(e)
     }
+  }
+
+  removeVaue = async() =>{
+    await AsyncStorage.multiRemove(["token","image","name","role"]);
+  }
+
+  logout = async ()=>{
+    await this.removeVaue();
+    Actions.Login()
   }
 
   render() {
