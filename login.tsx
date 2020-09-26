@@ -76,7 +76,7 @@ export default class Login extends Component {
         Actions.StudentDashboard();
       }
       else{
-        console.log("Failed to login")
+        alert(data.message || data.email[0]|| "Something went wrong");
       }
      
     }).catch(err=>console.log("Error"+err))

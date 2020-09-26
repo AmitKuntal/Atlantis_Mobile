@@ -7,6 +7,7 @@ import { AsyncStorage } from 'react-native';
 
 let status = 0;
 let token = '';
+let name = '';
 
 export default class StudentDashboard extends Component {
 
@@ -18,6 +19,8 @@ export default class StudentDashboard extends Component {
 
   async componentDidMount(){
     await this.getValue('token');
+    await this.getValue('name');
+
     fetch(config.baseurl+'auth/check/token',{
       method:'get',
       headers:{
@@ -31,10 +34,9 @@ export default class StudentDashboard extends Component {
         this.setState({...data})
       }
       else{
-        console.log("Error"+ data.message);
         this.logout
       }
-    }).catch(er=> console.log(er));
+    }).catch(er=> (er));
   }
 
 
@@ -50,10 +52,16 @@ export default class StudentDashboard extends Component {
   getValue = async (key) => {
     try {
       let value = await AsyncStorage.getItem(key);
-      token =value;
+      if(key === 'token'){
+        token = value
+      }
+      else{
+        name = value
+      }
+      
       return value;
     } catch(e) {
-      console.log(e)
+      e
     }
   }
   
@@ -61,7 +69,7 @@ export default class StudentDashboard extends Component {
     return (
       <>
       <Header>
-        <Title style={{margin:10}}>Welcome Amit</Title>
+        <Title style={{margin:10}}>{`Welcome ${name}`}</Title>
       </Header>
       <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-between'}}>
           <Button 
@@ -72,7 +80,7 @@ export default class StudentDashboard extends Component {
             style={{width:"100%", height:"80%",resizeMode:"contain"}}
             source={require('./../images/educationportal.png')}
           />
-          <Text style={{textAlign: 'center', fontSize:20, color:'black'}}>Education Portal</Text>
+          <Text style={{textAlign: 'center', fontSize:14, color:'black'}}>Education Portal</Text>
           </Button>
           <Button 
           style={{flex:1, flexDirection:'column' ,width: "48%", height: "98%", alignItems:'center', backgroundColor:'none'}}
@@ -82,7 +90,29 @@ export default class StudentDashboard extends Component {
               style={{width:"90%", height:"90%", resizeMode:'contain'}}
               source={require('./../images/homework.png')}
             />
-          <Text style={{textAlign: 'center', fontSize:20, color:'black'}}>Home work</Text>
+          <Text style={{textAlign: 'center', fontSize:14, color:'black'}}>Home work</Text>
+        </Button>
+      </View>
+      <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-between'}}>
+      <Button 
+      style={{flex:1, flexDirection:'column' ,width: "48%", height: "98%", alignItems:'center', backgroundColor:'none'}}
+      onPress={()=>Actions.TestDashboard()}
+      >
+            <Image
+              style={{width:"90%", height:"90%", resizeMode:'contain'}}
+              source={require('./../images/test.png')}
+            />
+          <Text style={{textAlign: 'center', fontSize:14, color:'black'}}>Exam Portal</Text>
+        </Button>
+        <Button 
+        style={{flex:1, flexDirection:'column' ,width: "48%", height: "98%", alignItems:'center', backgroundColor:'none'}}
+        onPress={()=>Actions.StudentProfile()}
+        >
+          <Image
+              style={{width:"90%", height:"90%", resizeMode:'contain'}}
+              source={require('./../images/liveclass.png')}
+            />
+          <Text style={{textAlign: 'center', fontSize:14, color:'black'}}>Live Class</Text>
         </Button>
       </View>
       <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-between'}}>
@@ -94,7 +124,7 @@ export default class StudentDashboard extends Component {
               style={{width:"90%", height:"90%", resizeMode:'contain'}}
               source={require('./../images/attendance.jpg')}
             />
-          <Text style={{textAlign: 'center', fontSize:20, color:'black'}}>Attendance</Text>
+          <Text style={{textAlign: 'center', fontSize:14, color:'black'}}>Attendance</Text>
         </Button>
         <Button 
         style={{flex:1, flexDirection:'column' ,width: "48%", height: "98%", alignItems:'center', backgroundColor:'none'}}
@@ -104,7 +134,7 @@ export default class StudentDashboard extends Component {
               style={{width:"90%", height:"90%", resizeMode:'contain'}}
               source={require('./../images/profile.png')}
             />
-          <Text style={{textAlign: 'center', fontSize:20, color:'black'}}>Profile</Text>
+          <Text style={{textAlign: 'center', fontSize:14, color:'black'}}>Profile</Text>
         </Button>
       </View>
     </>

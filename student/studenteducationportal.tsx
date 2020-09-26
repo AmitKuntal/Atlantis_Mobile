@@ -4,6 +4,8 @@ import { Container, Header, View,Title, Picker, Form, Button, Text, Card, CardIt
 import { WebView } from 'react-native-webview';
 import { AsyncStorage } from 'react-native';
 import config from './../config';
+import {Actions} from 'react-native-router-flux';
+
 
 let status = 0;
 let status1 = 0;
@@ -30,10 +32,8 @@ export default class StudentEducationPortal extends Component {
           if(status === 200 || status === 201){
             this.setState({subjects: data})
           }
-          else{
-            console.log("Error"+ data.message);
-          }
-        }).catch(er=> console.log(er));
+          
+        }).catch(er=> (er));
       }
     
       getValue = async (key) => {
@@ -42,7 +42,7 @@ export default class StudentEducationPortal extends Component {
           token =value;
           return value;
         } catch(e) {
-          console.log(e)
+          (e)
         }
       }
       
@@ -69,17 +69,26 @@ export default class StudentEducationPortal extends Component {
             this.setState({videos:data})
           }
           else{
-            console.log("error"+data.message)
+            this.logout
           }
-        }).catch(er=>console.log(er));
+        }).catch(er=>(er));
+      }
+
+      removeVaue = async() =>{
+        await AsyncStorage.multiRemove(["token","image","name","role"]);
+      }
+    
+      logout = async ()=>{
+        await this.removeVaue();
+        Actions.Login()
       }
       
   render() {
-    console.log(this.state);
+
     return (
         <Container>
             <Header>
-                <Title style={{margin:10}}>Homework</Title>
+                <Title style={{margin:10}}>Education Portal</Title>
             </Header>
             <View style={{width:'100%', height:80}}>
             {this.state.subjects?
@@ -90,6 +99,7 @@ export default class StudentEducationPortal extends Component {
               mode="dropdown"
               style={{width:"40%"}}
               onValueChange={this.onValueChange.bind(this)}
+              selectedValue={this.state.selected ? this.state.selected :""}
             >
                <Picker.Item label="Select Subject" value="Subject" />
               {this.state.subjects.map((subject,index)=>{

@@ -16,7 +16,7 @@ export default class StudentProfile extends Component {
     };
   }
 
-  async componentDidMount(){
+  async componentWillMount(){
     await this.getValue('token');
     fetch(config.baseurl+'auth/profile',{
       method:'get',
@@ -31,10 +31,9 @@ export default class StudentProfile extends Component {
         this.setState({...data})
       }
       else{
-        console.log("Error"+ data.message);
         this.logout
       }
-    }).catch(er=> console.log(er));
+    }).catch(er=> (er));
   }
 
   getValue = async (key) => {
@@ -43,7 +42,7 @@ export default class StudentProfile extends Component {
       token =value;
       return value;
     } catch(e) {
-      console.log(e)
+      (e)
     }
   }
 
@@ -61,7 +60,7 @@ export default class StudentProfile extends Component {
     return (
       <Container>
         <Header>
-        <Title style={{margin:10}}>Profile</Title>
+        <Title style={{margin:10}}>Your Profile</Title>
           </Header>
         <View>
             {this.state.personalInfo?(<Card>

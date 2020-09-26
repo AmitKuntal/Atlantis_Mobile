@@ -14,6 +14,10 @@ import StudentAttendance from './student/studentattendance';
 import StudentEducationPortal from './student/studenteducationportal';
 import StudentProfile from './student/studentprofile';
 import Login from './login';
+import TestDashboard from './student/testdashboard';
+import Tests from './student/tests';
+import ViewScore from './student/viewscore';
+
 export default class App extends Component {
   render() {
     return (
@@ -52,6 +56,24 @@ export default class App extends Component {
             component={StudentProfile}
             hideNavBar="true"
             title="StudentProfile"
+          />
+          <Scene
+            key="TestDashboard"
+            component={TestDashboard}
+            hideNavBar="true"
+            title="Test Dashboard"
+          />
+          <Scene
+            key="Tests"
+            component={Tests}
+            hideNavBar="true"
+            title="Tests"
+          />
+          <Scene
+            key="ViewScore"
+            component={ViewScore}
+            hideNavBar="true"
+            title="View Score"
           />
         </Scene>
       </Router>

@@ -54,19 +54,18 @@ export default class StudentAttendance extends Component {
         this.setState({data:data.attendancedata});
       }
       else{
-        console.log("Error ->" + JSON.stringify(data))
         this.logout;
       }
-    }).catch(err=> console.log("Error occur =>"+ err));
+    }).catch(err=> err);
   }
 
   getValue = async (key) => {
     try {
       let value = await AsyncStorage.getItem(key);
-      console.log(key+"-"+value)
+     
       return value;
     } catch(e) {
-      console.log(e)
+      e
     }
   }
 
@@ -80,7 +79,6 @@ export default class StudentAttendance extends Component {
   }
 
   render() {
-    console.log(this.state);
     return (
       <Container>
         <Header>
