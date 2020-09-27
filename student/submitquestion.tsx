@@ -67,11 +67,8 @@ export default class SubmitQuestion extends Component {
 
   
   render() {
-      console.log(this.state)
-
     return (
-      <Container>
-        <Card>
+        <Card style={{color:"Red"}}>
             <CardItem header bordered>
                 <Text>Q. {this.state.question}</Text>
             </CardItem>
@@ -111,7 +108,6 @@ export default class SubmitQuestion extends Component {
                     </Body>}
             </CardItem>
         </Card>
-      </Container>
     );
   }
 }

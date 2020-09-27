@@ -37,6 +37,12 @@ export default class Tests extends Component {
     }).catch(er=> (er));
   }
 
+  removeTest=(testId)=>{
+   this.setState({tests:this.state.tests.filter(function( obj ) {
+      return obj.id !== testId;
+    })})
+  }
+
 
   getValue = async (key) => {
     try {
@@ -63,11 +69,9 @@ export default class Tests extends Component {
         <Header>
         <Title style={{margin:10}}>Tests</Title>
           </Header>
-        <ScrollView style={{width:"100%" ,height:"95%"}}>
-            {this.state.tests?this.state.tests.map((test,index)=>{
-                return (<TakeTest {...test} key={index}/>)
+           {this.state.tests?this.state.tests.map((test,index)=>{
+                return (<TakeTest {...test} key={index} removeTest = {this.removeTest}/>)
             }):null}
-        </ScrollView>
       </Container>
     );
   }

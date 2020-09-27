@@ -18,7 +18,7 @@ export default class StudentEducationPortal extends Component {
         };
       }
 
-      async componentDidMount(){
+      async componentWillMount(){
         await this.getValue('token');
         fetch(config.baseurl+'student/subject',{
           method:'get',

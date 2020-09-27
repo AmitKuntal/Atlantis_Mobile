@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Container, Card, CardItem, Body,Text,Button } from 'native-base';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, ScrollView} from 'react-native';
 import config from './../config';
 import {Actions} from 'react-native-router-flux';
 import SubmitQuestion from './submitquestion';
-
+import Clock from './clock';
 
 let status = 0;
 let token = '';
@@ -49,6 +49,7 @@ export default class TakeTest extends Component {
       }).then(res=>res.json())
       .then(data=>{
           alert(data.message);
+          this.state.removeTest(this.state.id)
           this.setState({taketest:false})
       })
   }
@@ -73,18 +74,16 @@ export default class TakeTest extends Component {
   }
   
   render() {
-      console.log(this.state)
-
     return (
       <Container>
         {this.state.taketest?
-        <>
+        <ScrollView>
+        <Clock minutes = {this.state.duration} seconds={60} submitTest = {this.submitTest}/>
         {this.state.questions.map((question,index)=><SubmitQuestion {...question} key={index}/>)}
-            
             <Button full success style={{width:"100%"}} onPress={this.submitTest}>
                 <Text>Submit Exam</Text>
             </Button>
-        </> :
+        </ScrollView> :
         <Card>
             <CardItem header bordered>
                 <Text>Test Name :- {this.state.testname}</Text>

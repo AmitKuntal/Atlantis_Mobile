@@ -106,7 +106,7 @@ export default class StudentDashboard extends Component {
         </Button>
         <Button 
         style={{flex:1, flexDirection:'column' ,width: "48%", height: "98%", alignItems:'center', backgroundColor:'none'}}
-        onPress={()=>Actions.StudentProfile()}
+        onPress={()=>Actions.LiveClass()}
         >
           <Image
               style={{width:"90%", height:"90%", resizeMode:'contain'}}

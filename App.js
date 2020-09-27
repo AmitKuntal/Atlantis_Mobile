@@ -17,6 +17,7 @@ import Login from './login';
 import TestDashboard from './student/testdashboard';
 import Tests from './student/tests';
 import ViewScore from './student/viewscore';
+import LiveClass from './student/liveclass';
 
 export default class App extends Component {
   render() {
@@ -74,6 +75,12 @@ export default class App extends Component {
             component={ViewScore}
             hideNavBar="true"
             title="View Score"
+          />
+          <Scene
+            key="LiveClass"
+            component={LiveClass}
+            hideNavBar="true"
+            title="Live Class"
           />
         </Scene>
       </Router>
