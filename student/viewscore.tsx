@@ -33,7 +33,7 @@ export default class ViewScore extends Component {
         this.setState({tests:data})
       }
       else{
-        alert(data)
+        alert(data.message)
       }
     }).catch(er=> (er));
   }

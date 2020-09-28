@@ -5,6 +5,7 @@ import { WebView } from 'react-native-webview';
 import { AsyncStorage } from 'react-native';
 import config from './../config';
 import {Actions} from 'react-native-router-flux';
+import Chat from './ChatApp/Chat/Chat'
 
 
 let status = 0;
@@ -67,13 +68,16 @@ export default class StudentEducationPortal extends Component {
             </Header>
             <View style={{width:'100%', height:"80%"}}>
             {this.state.link?
+            <>
                 <WebView
                     javaScriptEnabled={true}
                     scrollEnabled={false}
                     allowsFullscreenVideo={true}
                     ignoreSslError={true}
                     source = {{uri:this.state.link}}
-                    />                       
+                    />   
+                    <Chat name={this.state.email} room={this.state.roomid}/>
+                    </>                    
                 :null}
             </View>          
         </Container>
